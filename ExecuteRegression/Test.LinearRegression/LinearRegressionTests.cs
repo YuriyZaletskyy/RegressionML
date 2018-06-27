@@ -44,10 +44,19 @@ namespace Test.LinearRegression
             outputs[2] = 19;
 
             var normalizer = new MultiThreadedNormalization();
-            var regressor = new LinearRegressor(normalizer, epsilon:0.0000000001);
+            var regressor = new LinearRegressor(normalizer, epsilon:0.0000001);
             var matrix = new Matrix(inputs);
             var weights = regressor.Fit(matrix, outputs);
 
+            var inputs2 = new double[1][];
+            inputs2[0] = new double[3];
+
+            inputs2[0][0] = 2;
+            inputs2[0][1] = 2;
+            inputs2[0][2] = 2;
+            var inputMatrix = new Matrix(inputs2);
+
+            var result = regressor.Predict(inputMatrix);
         }
     }
 }

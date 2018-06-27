@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,23 +51,20 @@ namespace LinearRegression
                 });
 
                 double[] diffs = new double[normalizedMatrix.LinesNumber];
+                double [] partials = new double[normalizedMatrix.ColumnsNumber];
 
                 Parallel.For(0, normalizedMatrix.LinesNumber, (i, inp) =>
                     {
                         diffs[i] = outputs[i] - normalizedMatrix[i, normalizedMatrix.ColumnsNumber - 1];
-                    });
-                
-                double [] partials = new double[normalizedMatrix.ColumnsNumber];
 
-                for (int i = 0; i < normalizedMatrix.LinesNumber; i++)
-                {
-                    int j;
-                    for (j = 0; j < normalizedMatrix.ColumnsNumber - 1; j++)
-                    {
-                        partials[j] = partials[j] + -2 * diffs[i] * normalizedMatrix[i, j];
-                    }
-                    partials[j] = partials[j] + -2 * diffs[i] * 1; // coefficient near last weight is always zero
-                }
+                        int j;
+                        for (j = 0; j < normalizedMatrix.ColumnsNumber - 1; j++)
+                        {
+                            partials[j] = partials[j] + -2 * diffs[i] * normalizedMatrix[i, j];
+                        }
+                        partials[j] = partials[j] + -2 * diffs[i] * 1; // coefficient near last weight is always one
+
+                });
 
                 for (int i = 0; i < normalizedMatrix.ColumnsNumber; i++)
                 {
@@ -80,7 +78,18 @@ namespace LinearRegression
 
         public double[] Predict(Matrix predictionData)
         {
-            throw new NotImplementedException();
+            double[] prediction = new double[predictionData.LinesNumber];
+            for(int i = 0; i < predictionData.LinesNumber; i++)
+            {
+                int j;
+                for (j = 0; j < predictionData.ColumnsNumber; j++)
+                {
+                    prediction[i] += Weights[j] * predictionData[i, j];
+                }
+                prediction[i] += Weights[j];
+            }
+
+            return prediction;
         }
 
         /// <summary>
