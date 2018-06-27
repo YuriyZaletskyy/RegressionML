@@ -5,11 +5,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2E3DF5C2-8A38-4A03-86D7-8D463C917E47}</ProjectGuid>
+    <ProjectGuid>{8578D800-B590-4EC5-9DA1-E943DC72BE5E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test.Regression.Common</RootNamespace>
-    <AssemblyName>Test.Regression.Common</AssemblyName>
+    <RootNamespace>Test.LinearRegression</RootNamespace>
+    <AssemblyName>Test.LinearRegression</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -62,16 +62,17 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="TestsMatrix.cs" />
+    <Compile Include="LinearRegressionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="bikes_rent.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\LinearRegression\LinearRegression.csproj">
+      <Project>{b80d9fbb-a2e9-445f-98fa-bbdf5390150e}</Project>
+      <Name>LinearRegression</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Regression.Common\Regression.Common.csproj">
       <Project>{5a199ebe-85fe-43ac-a70c-b1d9020f518c}</Project>
       <Name>Regression.Common</Name>

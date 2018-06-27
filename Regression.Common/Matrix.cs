@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Regression.Common
 {
@@ -31,6 +32,11 @@ namespace Regression.Common
         /// <param name="val">value of each element</param>
         public Matrix(int linesNumber, int columnsNumber, double val = 0.0)
         {
+            InitCleanData(linesNumber, columnsNumber, val);
+        }
+
+        private void InitCleanData(int linesNumber, int columnsNumber, double val = 0.0)
+        {
             this.LinesNumber = linesNumber;
             this.ColumnsNumber = columnsNumber;
 
@@ -45,10 +51,57 @@ namespace Regression.Common
             }
         }
 
-        public Double this[int index, int index2]
+        /// <summary>
+        /// Creates instance from csv file. Requirements for csv file are the following:
+        /// First line will be skipped ( as usually it has some header values )
+        /// columns should be separated by ,
+        /// For numbers as delimiter use .
+        /// </summary>
+        /// <param name="csvFileName">File name for loading data</param>
+        public Matrix(string csvFileName)
         {
-            get => Data[index][index2];
-            set => Data[index][index2] = value;
+            var lines = System.IO.File.ReadAllLines(csvFileName).Skip(1).Where(l => !string.IsNullOrEmpty(l)).ToList();
+            int numberOfColumns = lines[0].Count(x => x == ',') + 1;
+            int numberfOfLines = lines.Count;
+
+            InitCleanData(numberfOfLines, numberOfColumns);
+
+            int lineNumber = 0;
+            foreach (var line in lines)
+            {
+                var elements = line.Split(',').Select(a => double.Parse(a));
+                int idxElement = 0;
+                foreach (var element in elements)
+                {
+                    Data[lineNumber][idxElement] = element;
+                    idxElement++;
+                }
+
+                lineNumber++;
+            }
+        }
+
+        public Matrix AddColumn(double[] column)
+        {
+            var matrix = new Matrix(this.LinesNumber, this.ColumnsNumber + 1);
+
+            for (int i = 0; i < matrix.LinesNumber; i++)
+            {
+                int j;
+                for ( j = 0; j < this.ColumnsNumber; j++)
+                {
+                    matrix[i, j] = this[i, j];
+                }
+
+                matrix[i, j] = column[i];
+            }
+            return matrix;
+        }
+
+        public Double this[int row, int column]
+        {
+            get => Data[row][column];
+            set => Data[row][column] = value;
         }
 
         public Double[] this[int rowNumber] => Data[rowNumber];

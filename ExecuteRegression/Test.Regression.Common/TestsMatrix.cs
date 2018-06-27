@@ -140,11 +140,52 @@ namespace Test.CommonFunctionality
             {
                 for (int j = 0; j < normalizedMatrix.ColumnsNumber; j++)
                 {
-                    //var diff = normalizedMatrix[i, j] - normalizedMatrix1[i, j];
-                    //Assert.True(diff < 0.001);
                     Assert.Equal(normalizedMatrix[i, j], normalizedMatrix1[i, j]);
                 }
             }
+        }
+
+        [Fact]
+        public void TestColumnAddition()
+        {
+            double[][] data = new double[2][];
+            data[0] = new double[2];
+            data[1] = new double[2];
+
+            data[0][0] = 1.0;
+            data[0][1] = 2.0;
+            data[1][0] = 3.0;
+            data[1][1] = 4.0;
+
+            double[] data2 = new double[2];
+            data2[0] = 5.0;
+            data2[1] = 6.0;
+
+            var matrix1 = new Matrix(data);
+            var matrix2 = matrix1.AddColumn(data2);
+
+            Assert.Equal(matrix2[0, 2], 5.0);
+            Assert.Equal(matrix2[1, 2], 6.0);
+
+        }
+
+        [Fact]
+        public void TestLoadingCsvFile()
+        {
+            var matrix = new Matrix("bikes_rent.csv");
+
+            Assert.Equal(matrix[0,0], 1);
+            Assert.Equal(matrix[0,1], 0);
+            Assert.Equal(matrix[0,2], 1);
+            Assert.Equal(matrix[0,3], 0);
+            Assert.Equal(matrix[0,4], 6);
+            Assert.Equal(matrix[0,5], 0);
+            Assert.Equal(matrix[0,6], 2);
+            Assert.Equal(matrix[0,7], 14.110847);
+            Assert.Equal(matrix[0,11], 4.80549038891);
+
+            Assert.Equal(matrix.LinesNumber, 731);
+            Assert.Equal(matrix.ColumnsNumber, 13);
         }
     }
 }
